@@ -5,16 +5,17 @@ Features and utilities to simplify advanced gulpfiles.
 
  * Mocha test runner
  * Istanbul code coverage - both console report & browser report features
- * Simplified file watching
+ * File watching
  * Ability to start/restart companion processes required for tests
  * Ngrok integration
 
 ## Defaults / Conventions
+All of these can be changed, but without providing specific values for them, theses are `biggulp`'s defaults:
 
- * default sources: 		[ './src/**/*.js', './resource/**/*.js' ]
- * default spec path: 		'./spec'
- * default specs: 			[ '**/*.spec.js' ]
- * default watch paths:		[ './src/**/*', './spec/**/*', './resource/**/*' ]
+ * default sources: 		`[ './src/**/*.js', './resource/**/*.js' ]`
+ * default spec path: 		`'./spec'`
+ * default specs: 			`[ '**/*.spec.js' ]`
+ * default watch paths:		`[ './src/**/*', './spec/**/*', './resource/**/*' ]`
 
 ## Setup
 
@@ -27,10 +28,10 @@ var bg = require( 'biggulp' )( gulp )
 ```
 
 ## Mocha
-The coverage tasks will handle setting this up for you.
+Runs specifications via Mocha.
 
 ### bg.test( [ testGlob ] )
-Specify the test pattern to use after the default/root spec path. Default is '**/*.spec.js'.
+Run tests that match `testGlob` - the test pattern to use (relative to the default/root spec path). Default is `'**/*.spec.js'`.
 
 ```js
 gulp.task( 'specs', function() {
@@ -39,7 +40,7 @@ gulp.task( 'specs', function() {
 ```
 
 ### bg.testOnce( [ testGlob ] )
-Specify the test pattern to use after the default/root spec path. Default is '**/*.spec.js'. Works like `test` except it will exit with a 0 exit code if all tests pass and > 0 if any fail.
+Like `test` except it uses an exit code to indicate pass/fail (0 pass, >0 fail).
 
 ```js
 gulp.task( 'specs', function() {
@@ -49,7 +50,17 @@ gulp.task( 'specs', function() {
 
 ## Watchers
 
+### bg.watch( [watchGlobs], tasks )
+Creates a file watcher for the patterns specified (defaults to `[ './src/**/*', './spec/**/*', './resource/**/*' ]` ) and executes the array of tasks when a file changes.
+
+```js
+gulp.task( 'watch', function() {
+	return bg.watch( [ 'specs' ] );
+} );
+```
+
 ## Istanbul
+[Istanbul](https://github.com/gotwarlost/istanbul) is a great library that provides code coverage metrics. Use it, you won't be sorry.
 
 ### bg.withCoverage( [ testGlob ] )
 Works like `test` but adds a console report showing test coverage as measured by Istanbul.
@@ -59,17 +70,19 @@ gulp.task( 'coverage', bg.withCoverage() );
 ```
 
 ### bg.showCoverage( [ testGlob ] )
-Just like `withCoverage` but also displays the browser report and then exits the process.
+Like `withCoverage` but also displays the browser report and then exits the process.
 
 ```js
 gulp.task( 'show-coverage', bg.showCoverage() );
 ```
 
 ## Ngrok
-Ngrok is a great tunneling service that allows you to expose a local service publicly for testing. You can use a free version which doesn't guarantee your subdomain, or use a paid version and claim your subdomain!
+[Ngrok](https://ngrok.com/) is a tunneling service that allows you to expose a local service publicly.
+
+> Note: the free version does not reserver/guarantee your subdomain.
 
 ### bg.ngrok( subdomain, port, token )
-Sets up an ngrok tunnel and returns a promise which resolving to the public url when the tunnel is ready. All arguments are required.
+Sets up an ngrok tunnel and returns a promise which resolves to the public url once the tunnel is ready.
 
 ```js
 bg.grok( 'mahDomain', 8800, 'anToken' )
@@ -79,12 +92,16 @@ bg.grok( 'mahDomain', 8800, 'anToken' )
 ```
 
 ## process hosting
-Uses [processhost](https://github.com/leankit-labs/processhost) to start/restart processes.
+Uses [processhost](https://github.com/leankit-labs/processhost) to start/restart OS processes. See processhost README for details on options.
+
+> Notes:
+
+> 1. if you're using watch tasks, `biggulp` will restart __all__ processes defined this way for you on file changes.
+
+> 2. processes with the `restart` option set to false will not restart on file changes.
 
 ### bg.process( name, options )
-Use when you only need to manage a single process along with your test runs. Returns a promise that resolves on process start. If you're using watch tasks, `biggulp` will restart any processes defined this way for you on file changes.
-
-> Note: processes with the `restart` option set to false will not restart on file changes.
+Use when you only need to manage a single process along with your tests. Returns a promise that resolves on process start.
 
 ```js
 bg.process( 'redis', { cmd: 'redis-server', stdio: 'ignore', restart: false } )
@@ -94,7 +111,7 @@ bg.process( 'redis', { cmd: 'redis-server', stdio: 'ignore', restart: false } )
 ```
 
 ### bg.processes( processHash )
-Use when you need several processes. Returns a promise that resolves after all processes start. Note: if you're using watch tasks, `biggulp` will restart all processes defined this way for you on file changes.
+Use when you need several processes. Returns a promise that resolves after all processes start.
 
 ```js
 bg.processes(
@@ -108,12 +125,18 @@ bg.processes(
 ```
 
 ## Example
-This example shows the following combinations:
+This example has tasks that demonstrate the following "recipes":
 
- * `build` - run the tests and exit with 0 for success > 0 for failure
- * `specs` - continuously re-run specs on change
- * `default` - continuously re-run specs on change and display coverage in console
- * `show-coverage` - runs the specs and opens the browser to a coverage report
+<dl>
+	<dt>build</dt>
+	<dd>run the tests and exit with 0 for success > 0 for failure</dd>
+	<dt>specs</dt>
+	<dd>continuously re-run specs on change</dd>
+	<dt>default</dt>
+	<dd>continuously re-run specs on change and display coverage in console</dd>
+	<dt>show-coverage</dt>
+	<dd>runs the specs and opens the browser to a coverage report</dd>
+</dl>
 
 
  ```js
