@@ -1,0 +1,31 @@
+{
+  "name": "biggulp",
+  "version": "0.0.1",
+  "description": "Features and utilities to simplify advanced gulpfiles",
+  "main": "src/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LeanKit-Labs/biggulp"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": "Alex Robson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeanKit-Labs/biggulp/issues"
+  },
+  "homepage": "https://github.com/LeanKit-Labs/biggulp",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-esformatter": "^1.0.1",
+    "gulp-istanbul": "^0.6.0",
+    "gulp-mocha": "^2.0.0",
+    "lodash": "^3.2.0",
+    "ngrok": "^0.1.99",
+    "open": "0.0.5",
+    "processhost": "^0.2.1",
+    "when": "^3.7.2"
+  }
+}

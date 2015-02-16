@@ -1,0 +1,6 @@
+demo/
+data/
+tmp/
+node_modules/
+coverage/
+spec/
