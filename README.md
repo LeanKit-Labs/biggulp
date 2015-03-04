@@ -142,7 +142,7 @@ This example has tasks that demonstrate the following "recipes":
  ```js
 var gulp = require( 'gulp' );
 // uses default paths
-var bg = require( 'biggulp' )();
+var bg = require( 'biggulp' )(gulp);
 
 // a task to pass default tests to istanbul
 // results in a coverage report at the end of
