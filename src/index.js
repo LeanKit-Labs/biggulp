@@ -1,15 +1,10 @@
-// var gulp = require( 'gulp' );
-var mocha = require( 'gulp-mocha' );
-var istanbul = require( 'gulp-istanbul' );
+var gulp;
 var open = require( 'open' ); //jshint ignore : line
-var ngrok = require( 'ngrok' );
 var processhost = require( 'processhost' )();
-var esformatter = require( 'gulp-esformatter' );
 var when = require( 'when' );
 var _ = require( 'lodash' );
 var path = require( 'path' );
-var gulp = require( 'gulp' );
-
+var mocha = require( 'gulp-spawn-mocha' );
 var cmdPostfix = process.platform === 'win32' ? '.cmd' : '';
 var defaultSources = [ './src/**/*.js', './resource/**/*.js' ];
 var defaultSpecPath = [ './spec' ];
@@ -19,25 +14,21 @@ var processesDefined = false;
 
 process.on( 'uncaughtError', console.log );
 
-function cover( sources, show ) {
+function cover( specPath, show ) {
 	var args = Array.prototype.slice.call( arguments, 2 ) || [];
-	return function( cb ) {
-		return gulp.src( sources )
-			.pipe( istanbul() )
-			.pipe( istanbul.hookRequire() )
-			.on( 'finish', function() {
-				writeReport( cb, show, runSpecs.apply( undefined, args ) );
+	args.unshift( specPath, true );
+	return function( /* cb */ ) {
+		return runSpecs.apply( undefined, args )
+			.on( 'end', function() {
+				if ( show ) {
+					open( './coverage/lcov-report/index.html' );
+					process.exit();
+				}
 			} );
 	};
 }
 
-function format( sources, targets ) {
-	return gulp.src( sources )
-		.pipe( esformatter() )
-		.pipe( gulp.dest( targets ) );
-}
-
-function groklate( subdomain, port, token ) {
+function groklate( ngrok, subdomain, port, token ) {
 	return when.promise( function( resolve, reject ) {
 		ngrok.connect( {
 			port: port,
@@ -64,15 +55,21 @@ function init() {
 	} );
 }
 
-function runSpecs( specPath ) {
-	var args = Array.prototype.slice.call( arguments, 1 );
+function runSpecs( specPath, coverage ) {
+	var args = Array.prototype.slice.call( arguments, 2 );
 	if ( args.length === 0 ) {
 		args = [ defaultSpecs ];
 	}
-	var joinArgs = _.flatten( [ specPath ].concat( args ) );
-	var specs = path.join.apply( path, joinArgs );
-	return gulp.src( [ specs ], { read: false } )
-		.pipe( mocha( { reporter: 'spec' } ) );
+	var joinArgs = _.flatten( args );
+	var specs = _.reduce( joinArgs, function( acc, spec ) {
+		_.each( specPath, function( p ) {
+			acc.push( path.join( p, spec ) );
+		} );
+		return acc;
+	}, [] );
+	return gulp
+		.src( specs, { read: false } )
+		.pipe( mocha( { R: 'spec', istanbul: coverage ? true : false } ) );
 }
 
 function setupProcess( processName, opts ) {
@@ -102,33 +99,17 @@ function watch( paths, tasks ) {
 	return gulp.watch( paths, tasks.concat( tasks ) );
 }
 
-function writeReport( cb, openBrowser, tests ) {
-	return tests
-		.on( 'error', function( e ) {
-			console.log( 'error occurred during testing', e.stack );
-		} )
-		.pipe( istanbul.writeReports() )
-		.on( 'end', function() {
-			if ( openBrowser ) {
-				open( './coverage/lcov-report/index.html' );
-				process.exit();
-			}
-		} );
-}
-
-module.exports = function( sources, specPath, watchPaths ) {
-
-	sources = sources || defaultSources;
+module.exports = function( gulpRef, specPath, watchPaths ) {
+	gulp = gulpRef;
 	specPath = specPath || defaultSpecPath;
 	watchPaths = watchPaths || defaultWatchPaths;
 	init();
 	return {
 		cover: cover,
-		format: format,
 		ngrok: groklate,
 		process: setupProcess,
 		processes: setupProcesses,
-		showCoverage: cover.bind( undefined, sources, true, specPath ),
+		showCoverage: cover.bind( undefined, specPath, true ),
 		testOnce: testAndExit.bind( undefined, specPath ),
 		test: runSpecs.bind( undefined, specPath ),
 		watch: function() {
@@ -139,6 +120,6 @@ module.exports = function( sources, specPath, watchPaths ) {
 				return watch( watchPaths, args[ 0 ] );
 			}
 		},
-		withCoverage: cover.bind( undefined, sources, false, specPath ),
+		withCoverage: cover.bind( undefined, specPath, false ),
 	};
 };
