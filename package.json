@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "scripts": {},
@@ -18,14 +18,10 @@
   },
   "homepage": "https://github.com/LeanKit-Labs/biggulp",
   "dependencies": {
-    "gulp": "^3.8.11",
-    "gulp-esformatter": "^1.0.1",
-    "gulp-istanbul": "^0.6.0",
-    "gulp-mocha": "^2.0.0",
-    "lodash": "^3.2.0",
-    "ngrok": "^0.1.99",
-    "open": "0.0.5",
-    "processhost": "^0.2.1",
-    "when": "^3.7.2"
+    "gulp-spawn-mocha": "~2.0.1",
+    "lodash": "~3.7.0",
+    "open": "~0.0.5",
+    "processhost": "~0.2.1",
+    "when": "~3.7.2"
   }
 }
