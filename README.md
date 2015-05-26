@@ -12,7 +12,6 @@ Features and utilities to simplify advanced gulpfiles.
 ## Defaults / Conventions
 All of these can be changed, but without providing specific values for them, theses are `biggulp`'s defaults:
 
- * default sources: 		`[ './src/**/*.js', './resource/**/*.js' ]`
  * default spec path: 		`'./spec'`
  * default specs: 			`[ '**/*.spec.js' ]`
  * default watch paths:		`[ './src/**/*', './spec/**/*', './resource/**/*' ]`
@@ -79,13 +78,17 @@ gulp.task( 'show-coverage', bg.showCoverage() );
 ## Ngrok
 [Ngrok](https://ngrok.com/) is a tunneling service that allows you to expose a local service publicly.
 
-> Note: the free version does not reserver/guarantee your subdomain.
+> Note: the free version does not reserve/guarantee your subdomain.
 
-### bg.ngrok( subdomain, port, token )
+### bg.ngrok( ngrok, subdomain, port, token )
 Sets up an ngrok tunnel and returns a promise which resolves to the public url once the tunnel is ready.
 
+> Note: the ngrok instance is required to eliminate always installing ngrok as a dependency for biggulp when not in-use.
+
 ```js
-bg.grok( 'mahDomain', 8800, 'anToken' )
+var ngrok = require( 'ngrok' );
+
+bg.grok( ngrok, 'mahDomain', 8800, 'anToken' )
 	.then( function( url ) {
 		console.log( 'Tunneling', url, 'to 8800' );
 	} );
