@@ -67,9 +67,14 @@ function runSpecs( specPath, coverage ) {
 		} );
 		return acc;
 	}, [] );
+	var specExclude = _.map( specPath, function ( p ) {
+		return path.join( p, '**/*' );
+	} );
 	return gulp
 		.src( specs, { read: false } )
-		.pipe( mocha( { R: 'spec', istanbul: coverage ? true : false } ) );
+		.pipe( mocha( { R: 'spec', istanbul: coverage ? {
+			x: specExclude
+		} : false } ) );
 }
 
 function setupProcess( processName, opts ) {
