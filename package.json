@@ -35,7 +35,12 @@
   },
   "homepage": "https://github.com/LeanKit-Labs/biggulp",
   "dependencies": {
+    "gulp-changed": "^1.2.1",
+    "gulp-jscs": "^1.6.0",
+    "gulp-jshint": "^1.11.0",
     "gulp-spawn-mocha": "~2.0.1",
+    "gulp-util": "^3.0.6",
+    "jshint-stylish": "^2.0.1",
     "lodash": "3.x",
     "open": "~0.0.5",
     "processhost": "~0.2.1",
