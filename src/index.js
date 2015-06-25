@@ -14,7 +14,7 @@ var defaults = {
 	sourcePaths: [ "./src", "./resource" ],
 	sources: [ "**/*.js" ],
 	coverageHtml: "./coverage/lcov-report/index.html",
-	exclude: [ "!node_modules*" ],
+	exclude: [ "!node_modules*", "!coverage*" ],
 	jscsCfgPath: ".jscsrc"
 };
 var jshint = require( "gulp-jshint" );
@@ -49,7 +49,7 @@ module.exports = function( gulpRef, cfg ) {
 	}
 
 	function test( specs ) {
-		var s = _.isArray(specs) ? specs: [ specs ];
+		var s = _.isArray( specs ) ? specs : [ specs ];
 		return runSpecs( {
 			specs: s
 		} );
@@ -64,7 +64,7 @@ module.exports = function( gulpRef, cfg ) {
 	function testAll( opt ) {
 		var _opt = opt || options;
 		var specs = permuPath( _opt.allSpecPaths, _opt.specs );
-		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ]);
+		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ] );
 		return runSpecs( {
 			specs: specs,
 			coverageExclude: coverageExclude,
@@ -81,7 +81,7 @@ module.exports = function( gulpRef, cfg ) {
 	function testBehavior( opt ) {
 		var _opt = opt || options;
 		var specs = permuPath( _opt.behaviorSpecPaths, _opt.specs );
-		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ]);
+		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ] );
 		return runSpecs( {
 			specs: specs,
 			coverageExclude: coverageExclude,
@@ -98,7 +98,7 @@ module.exports = function( gulpRef, cfg ) {
 	function testIntegration( opt ) {
 		var _opt = opt || options;
 		var specs = permuPath( _opt.integrationSpecPaths, _opt.specs );
-		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ]);
+		var coverageExclude = permuPath( _opt.allSpecPaths, [ "**/*" ] );
 		return runSpecs( {
 			specs: specs,
 			coverageExclude: coverageExclude,
@@ -113,13 +113,13 @@ module.exports = function( gulpRef, cfg ) {
 	}
 
 	function cover( opt ) {
-		var _opt = opt || _.clone(options);
+		var _opt = opt || _.clone( options );
 		_opt.coverage = true;
 		return testAll( _opt );
 	}
 
 	function showCoverage( opt ) {
-		var _opt = opt || _.clone(options);
+		var _opt = opt || _.clone( options );
 		_opt.coverage = true;
 		return testAll( opt ).on( "end", function() {
 			open( _opt.coverageHtml );
@@ -143,8 +143,8 @@ module.exports = function( gulpRef, cfg ) {
 	}
 
 	function groklate( ngrok, opts ) {
-		if(!opts && !options.ngrok) {
-			throw new Error("To use ngrok you must supply an options argument containing port, subdomain and token");
+		if ( !opts && !options.ngrok ) {
+			throw new Error( "To use ngrok you must supply an options argument containing port, subdomain and token" );
 		}
 		var _opt = opts || options.ngrok;
 		return when.promise( function( resolve, reject ) {
@@ -195,7 +195,7 @@ module.exports = function( gulpRef, cfg ) {
 
 	function lint( opt ) {
 		var _opt = opt || options;
-		return gulp.src( permuPath( _opt.sourcePaths, _opt.sources ) )
+		return gulp.src( _opt.sources.concat( _opt.exclude ) )
 			.on( "error", function( error ) {
 				gutil.log( gutil.colors.red( error.message + " in " + error.fileName ) );
 				this.end();
