@@ -41,11 +41,15 @@ module.exports = function( gulpRef, cfg ) {
 	var processesDefined = false;
 
 	function runSpecs( testCfg ) {
+		var mochaOpts = {
+			R: "spec",
+			istanbul: testCfg.coverage ? { x: testCfg.coverageExclude } : false
+		};
+		if ( options.esnext ) {
+			mochaOpts.r = "babel/register";
+		}
 		return gulp.src( testCfg.specs, { read: false } )
-			.pipe( mocha( {
-				R: "spec",
-				istanbul: testCfg.coverage ? { x: testCfg.coverageExclude } : false
-			} ) );
+			.pipe( mocha( mochaOpts ) );
 	}
 
 	function test( specs ) {
