@@ -1,16 +1,16 @@
-var gutil = require("gulp-util");
-var pkg = require("../package.json");
+var gutil = require( "gulp-util" );
+var pkg = require( "../package.json" );
 
 function calColWidth( x ) {
-	return x.map(function( s ) {
+	return x.map( function( s ) {
 			return s.length;
-		}).sort( function( a,b ) {
-			return b-a;
+		} ).sort( function( a, b ) {
+			return b - a;
 		} )[0] + 1;
 }
 
 function padCol( col, len ) {
-	return col + new Array( len - col.length ).join(" ");
+	return col + new Array( len - col.length ).join( " " );
 }
 
 module.exports = function( gulp, cfg ) {
@@ -22,24 +22,24 @@ module.exports = function( gulp, cfg ) {
 		Object.keys( config ).forEach( function( taskNm ) {
 			var args = [ taskNm ];
 			var task = config[ taskNm ];
-			if(task.deps) {
-				args.push(task.deps);
+			if ( task.deps ) {
+				args.push( task.deps );
 			}
-			if(task.fn) {
-				args.push(task.fn);
+			if ( task.fn ) {
+				args.push( task.fn );
 			}
 			gulp.task.apply( gulp, args );
 		} );
 	}
 
-	addTasksWithDescription({
-		"continuous-test" : {
+	addTasksWithDescription( {
+		"continuous-test": {
 			description: "Runs all tests in a watch-friendly manner.",
 			fn: function() {
 				bg.testAll();
 			}
 		},
-		coverage : {
+		coverage: {
 			description: "Runs test coverage report & displays in the console.",
 			deps: [ "format" ],
 			fn: function() {
@@ -48,17 +48,18 @@ module.exports = function( gulp, cfg ) {
 		},
 		"coverage-watch": {
 			description: "Continuously runs console-based test coverage report in watch mode.",
+			deps: [ "coverage" ],
 			fn: function() {
 				bg.watch( [ "coverage" ] );
 			}
 		},
-		default : {
+		default: {
 			description: "Runs the coverage report, and then kicks off coverage-watch",
 			deps: [ "coverage", "coverage-watch" ]
 		},
-		format : {
+		format: {
 			description: "Runs format linting and fixing.",
-			deps:  [ "jshint" ],
+			deps: [ "jshint" ],
 			fn: function() {
 				return bg.format();
 			}
@@ -67,19 +68,19 @@ module.exports = function( gulp, cfg ) {
 			description: "Displays the task list with their descriptions",
 			fn: function() {
 				gutil.log( gutil.colors.white( "--------------------------------------" ) );
-				gutil.log( gutil.colors.white( "   biggulp", "v" + pkg.version,"- Available Tasks" ) );
+				gutil.log( gutil.colors.white( "   biggulp", "v" + pkg.version, "- Available Tasks" ) );
 				gutil.log( gutil.colors.white( "--------------------------------------" ) );
 				var taskNames = Object.keys( tasks );
 				var colLen = calColWidth( taskNames );
-				taskNames.forEach( function( taskNm ){
+				taskNames.forEach( function( taskNm ) {
 					var task = tasks[taskNm];
-					var msg = gutil.colors.green( padCol( taskNm, colLen ), "- ");
+					var msg = gutil.colors.green( padCol( taskNm, colLen ), "- " );
 					msg += gutil.colors.blue( task.description );
-					if(task.deps) {
+					if ( task.deps ) {
 						msg += gutil.colors.yellow( " (depends on:", task.deps + ")" );
 					}
 					gutil.log( msg );
-				});
+				} );
 			}
 		},
 		jshint: {
@@ -94,11 +95,11 @@ module.exports = function( gulp, cfg ) {
 				return bg.showCoverage();
 			}
 		},
-		test : {
+		test: {
 			description: "Alias for the test-watch task.",
 			deps: [ "test-watch" ]
 		},
-		"test-and-exit" : {
+		"test-and-exit": {
 			description: "Runs all tests and exits.",
 			fn: function() {
 				bg.testAllOnce();
@@ -118,10 +119,11 @@ module.exports = function( gulp, cfg ) {
 		},
 		"test-watch": {
 			description: "Continuously runs all tests in watch mode.",
+			deps: [ "continuous-test" ],
 			fn: function() {
 				bg.watch( [ "continuous-test" ] );
 			}
 		}
-	});
+	} );
 	return bg;
 };
