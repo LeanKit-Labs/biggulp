@@ -1,5 +1,6 @@
 var gutil = require( "gulp-util" );
 var pkg = require( "../package.json" );
+var help = require( "./help" );
 
 function calColWidth( x ) {
 	return x.map( function( s ) {
@@ -65,8 +66,9 @@ module.exports = function( gulp, cfg ) {
 			}
 		},
 		help: {
-			description: "Displays the task list with their descriptions",
+			description: "I need somebody. HELP! Not just anybody. HELP! You know I need someone...",
 			fn: function() {
+				gutil.log( help.banner() );
 				gutil.log( gutil.colors.white( "--------------------------------------" ) );
 				gutil.log( gutil.colors.white( "   biggulp", "v" + pkg.version, "- Available Tasks" ) );
 				gutil.log( gutil.colors.white( "--------------------------------------" ) );
