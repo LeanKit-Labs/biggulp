@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "files": [
@@ -27,6 +27,16 @@
     {
       "name": "Doug Neiner",
       "url": "http://dougneiner.com"
+    },
+    {
+      "name": "Jim Cowart",
+      "email": "jim.cowart@leankit.com",
+      "url": "http://ifandelse.com"
+    },
+    {
+      "name": "Matt Dunlap",
+      "email": "matt.dunlap@leankit.com",
+      "url": "https://github.com/prestaul"
     }
   ],
   "license": "MIT",
