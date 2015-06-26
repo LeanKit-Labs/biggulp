@@ -1,4 +1,8 @@
 ## 0.0.x
+* Breaking refactor to accept options object in lieu of separate arguments
+* Internal methods now pull from default config unless overridden
+* Added common-gulp module to abstract common tasks.
+* Added self-referencing gulpfile
 
 ### 0.0.5
 * Excluding files under spec path from istanbul.
