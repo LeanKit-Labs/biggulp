@@ -23,7 +23,7 @@ All of these can be changed, but without providing specific values for them, the
 	watchPaths: [ "./src/**/*", "./spec/**/*", "./resource/**/*" ],
 	sourcePaths: [ "./src", "./resource" ],
 	sources: [ "**/*.js" ],
-	exclude: [ "!node_modules*" ],
+	exclude: [ "!node_modules/**", "!coverage/**" ],
 	jscsCfgPath: ".jscsrc"
 }
  ```

@@ -14,7 +14,7 @@ var defaults = {
 	sourcePaths: [ "./src", "./resource" ],
 	sources: [ "**/*.js" ],
 	coverageHtml: "./coverage/lcov-report/index.html",
-	exclude: [ "!node_modules*", "!coverage*" ],
+	exclude: [ "!node_modules/**", "!coverage/**" ],
 	jscsCfgPath: ".jscsrc"
 };
 var jshint = require( "gulp-jshint" );
