@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "files": [
@@ -19,7 +19,7 @@
   "keywords": [
     "gulp"
   ],
-  "author": "Alex Robson",
+  "author": "LeanKit",
   "contributors": [
     {
       "name": "Alex Robson",
