@@ -23,6 +23,12 @@ module.exports = function( gulp, cfg ) {
 	}
 
 	addTasksWithDescription( {
+		about: {
+			description: "Where'd all these tasks come from?",
+			fn: function() {
+				about.print();
+			}
+		},
 		"continuous-test": {
 			description: "Runs all tests in a watch-friendly manner.",
 			fn: function() {
@@ -54,12 +60,6 @@ module.exports = function( gulp, cfg ) {
 				return bg.format();
 			}
 		},
-		about: {
-			description: "Where'd all these tasks come from?",
-			fn: function() {
-				about.print();
-			}
-		},
 		jshint: {
 			description: "Lints your code. Warning: It might hurt your feelings. See Doug Crockford for free hugs.",
 			fn: function() {
@@ -73,11 +73,12 @@ module.exports = function( gulp, cfg ) {
 			}
 		},
 		test: {
-			description: "Alias for the test-watch task.",
-			deps: [ "test-watch" ]
+			description: "Alias for the coverage task.",
+			deps: [ "coverage" ]
 		},
 		"test-and-exit": {
 			description: "Runs all tests and exits.",
+			deps: [ "jshint" ],
 			fn: function() {
 				bg.testAllOnce();
 			}

@@ -187,11 +187,14 @@ We've discovered many of our node-only and OSS libs typically have the same task
 var bg = require( "biggulp/common-gulp" )( require( "gulp" ) );
 /*
 	Gives you the following tasks:
-	├── restartProcesses
+    ├─┬ ?
+    │ └── help
+    ├── about
     ├── continuous-test
     ├─┬ coverage
     │ └── format
-    ├── coverage-watch
+    ├─┬ coverage-watch
+    │ └── coverage
     ├─┬ default
     │ ├── coverage
     │ └── coverage-watch
@@ -199,13 +202,16 @@ var bg = require( "biggulp/common-gulp" )( require( "gulp" ) );
     │ └── jshint
     ├── help
     ├── jshint
+    ├── restartProcesses
     ├── show-coverage
     ├─┬ test
-    │ └── test-watch
-    ├── test-and-exit
+    │ └── coverage
+    ├─┬ test-and-exit
+    │ └── jshint
     ├── test-behavior
     ├── test-int
-    └── test-watch
+    ├─┬ test-watch
+    │ └── continuous-test
 */
 ```
 
