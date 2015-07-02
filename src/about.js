@@ -1,4 +1,8 @@
 var gutil = require( "gulp-util" );
+var fs = require( "fs" );
+var path = require( "path" );
+var pkg = require( "../package.json" );
+var license = fs.readFileSync( path.join( __dirname, "..", "LICENSE" ) ).toString();
 var banner = [
 	"                                                                                ",
 	"                                   ..:/:..                                      ",
@@ -28,17 +32,22 @@ var banner = [
 	"       +mm.  smmo         dmy      dmh +mm:    :mm/ mmhhmh/    mmy ymd          ",
 	"       :mms: .hmd+:-:oho  /dmy+::+hmmh +mm:    :mm/ mms`+dmy-  mmy +mmo:        ",
 	"        :ydd  `/shdddho-   .+ydddh  hy /hh.    :hh: hho  `ohh+`hhs  /ydd+       ",
-	"                                                                                "
+	"                                                                                ",
+	"--------------------------------------------------------------------------------",
+	"    biggulp v" + pkg.version,
+	"--------------------------------------------------------------------------------",
+	"",
+	license
 ];
 
 module.exports = {
-	banner: function() {
+	print: function() {
 		// yay for brute-forcing colors onto the banner...?
 		var colorized = gutil.colors.green( banner.slice( 0, 19 ).join( "\n" ) );
 		colorized += "\n" + gutil.colors.white( banner[ 19 ].substring( 0, 37 ) );
 		colorized += gutil.colors.green( banner[ 19 ].substring( 37, 41 ) );
 		colorized += gutil.colors.white( banner[ 19 ].substring( 41, 80 ) ) + "\n";
 		colorized += gutil.colors.white( banner.slice( 20 ).join( "\n" ) );
-		return colorized;
+		gutil.log( colorized );
 	}
 };

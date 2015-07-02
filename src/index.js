@@ -36,7 +36,9 @@ function permuPath( dirs, globs ) {
 }
 
 module.exports = function( gulpRef, cfg ) {
-	var gulp = gulpRef;
+	var gulp = require( "gulp-help" )( gulpRef, {
+		aliases: [ "?" ]
+	} );
 	var options = _.defaults( cfg || {}, defaults );
 	var processesDefined = false;
 
