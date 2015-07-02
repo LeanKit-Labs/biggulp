@@ -133,7 +133,7 @@ module.exports = function( gulpRef, cfg ) {
 
 	function setupProcess( processName, opts ) {
 		processesDefined = true;
-		return processhost.startProcess( processName, {
+		return processhost.start( processName, {
 			command: opts.command || opts.cmd || "node" + cmdPostfix,
 			args: opts.arguments || opts.args || [],
 			stdio: opts.stdio || "inherits",
