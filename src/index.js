@@ -36,7 +36,9 @@ function permuPath( dirs, globs ) {
 }
 
 module.exports = function( gulpRef, cfg ) {
-	var gulp = gulpRef;
+	var gulp = require( "gulp-help" )( gulpRef, {
+		aliases: [ "?" ]
+	} );
 	var options = _.defaults( cfg || {}, defaults );
 	var processesDefined = false;
 
@@ -53,9 +55,9 @@ module.exports = function( gulpRef, cfg ) {
 	}
 
 	function test( specs ) {
-		var s = _.isArray( specs ) ? specs : [ specs ];
+		specs = specs || defaults.specs;
 		return runSpecs( {
-			specs: s
+			specs: _.isArray( specs ) ? specs : [ specs ]
 		} );
 	}
 
@@ -133,7 +135,7 @@ module.exports = function( gulpRef, cfg ) {
 
 	function setupProcess( processName, opts ) {
 		processesDefined = true;
-		return processhost.startProcess( processName, {
+		return processhost.start( processName, {
 			command: opts.command || opts.cmd || "node" + cmdPostfix,
 			args: opts.arguments || opts.args || [],
 			stdio: opts.stdio || "inherits",

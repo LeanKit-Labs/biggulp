@@ -1,18 +1,4 @@
-var gutil = require( "gulp-util" );
-var pkg = require( "../package.json" );
-var help = require( "./help" );
-
-function calColWidth( x ) {
-	return x.map( function( s ) {
-			return s.length;
-		} ).sort( function( a, b ) {
-			return b - a;
-		} )[0] + 1;
-}
-
-function padCol( col, len ) {
-	return col + new Array( len - col.length ).join( " " );
-}
+var about = require( "./about" );
 
 module.exports = function( gulp, cfg ) {
 	var tasks;
@@ -23,6 +9,9 @@ module.exports = function( gulp, cfg ) {
 		Object.keys( config ).forEach( function( taskNm ) {
 			var args = [ taskNm ];
 			var task = config[ taskNm ];
+			if ( task.description ) {
+				args.push( task.description );
+			}
 			if ( task.deps ) {
 				args.push( task.deps );
 			}
@@ -34,6 +23,12 @@ module.exports = function( gulp, cfg ) {
 	}
 
 	addTasksWithDescription( {
+		about: {
+			description: "Where'd all these tasks come from?",
+			fn: function() {
+				about.print();
+			}
+		},
 		"continuous-test": {
 			description: "Runs all tests in a watch-friendly manner.",
 			fn: function() {
@@ -65,26 +60,6 @@ module.exports = function( gulp, cfg ) {
 				return bg.format();
 			}
 		},
-		help: {
-			description: "I need somebody. HELP! Not just anybody. HELP! You know I need someone...",
-			fn: function() {
-				gutil.log( help.banner() );
-				gutil.log( gutil.colors.white( "--------------------------------------" ) );
-				gutil.log( gutil.colors.white( "   biggulp", "v" + pkg.version, "- Available Tasks" ) );
-				gutil.log( gutil.colors.white( "--------------------------------------" ) );
-				var taskNames = Object.keys( tasks );
-				var colLen = calColWidth( taskNames );
-				taskNames.forEach( function( taskNm ) {
-					var task = tasks[taskNm];
-					var msg = gutil.colors.green( padCol( taskNm, colLen ), "- " );
-					msg += gutil.colors.blue( task.description );
-					if ( task.deps ) {
-						msg += gutil.colors.yellow( " (depends on:", task.deps + ")" );
-					}
-					gutil.log( msg );
-				} );
-			}
-		},
 		jshint: {
 			description: "Lints your code. Warning: It might hurt your feelings. See Doug Crockford for free hugs.",
 			fn: function() {
@@ -98,11 +73,12 @@ module.exports = function( gulp, cfg ) {
 			}
 		},
 		test: {
-			description: "Alias for the test-watch task.",
-			deps: [ "test-watch" ]
+			description: "Alias for the coverage task.",
+			deps: [ "coverage" ]
 		},
 		"test-and-exit": {
 			description: "Runs all tests and exits.",
+			deps: [ "jshint" ],
 			fn: function() {
 				bg.testAllOnce();
 			}

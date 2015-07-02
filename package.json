@@ -47,6 +47,7 @@
   "homepage": "https://github.com/LeanKit-Labs/biggulp",
   "dependencies": {
     "gulp-changed": "^1.2.1",
+    "gulp-help": "^1.6.0",
     "gulp-jscs": "^1.6.0",
     "gulp-jshint": "^1.11.0",
     "gulp-spawn-mocha": "~2.0.1",
