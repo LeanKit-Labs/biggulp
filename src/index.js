@@ -53,9 +53,9 @@ module.exports = function( gulpRef, cfg ) {
 	}
 
 	function test( specs ) {
-		var s = _.isArray( specs ) ? specs : [ specs ];
+		specs = specs || defaults.specs;
 		return runSpecs( {
-			specs: s
+			specs: _.isArray( specs ) ? specs : [ specs ]
 		} );
 	}
 
