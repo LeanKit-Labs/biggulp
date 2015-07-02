@@ -1,4 +1,12 @@
-## 0.1.x
+## 0.2.x
+
+### 0.2.0
+
+* Fix call to renamed processhost method
+* Allow test method to be called with default spec paths
+* Updated copyright notice in license
+* Added gulp-help for documenting tasks
+* Update test task to perform lint/format/coverage and test-and-exit to lint
 
 ### 0.1.2
 Add a banner to help command. Banners are super cool.
