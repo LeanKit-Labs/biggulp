@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "files": [
@@ -38,6 +38,10 @@
       "name": "Matt Dunlap",
       "email": "matt.dunlap@leankit.com",
       "url": "https://github.com/prestaul"
+    },
+    {
+      "name": "Brian Edgerton",
+      "url": "https://github.com/brianedgerton"
     }
   ],
   "license": "MIT",
