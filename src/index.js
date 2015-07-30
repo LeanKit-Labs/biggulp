@@ -75,7 +75,7 @@ module.exports = function( gulpRef, cfg ) {
 			specs: specs,
 			coverageExclude: coverageExclude,
 			coverage: _opt.coverage
-		} );
+		} ).on( "error", _.noop );
 	}
 
 	function testAllAndExit( opt ) {
