@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "files": [
@@ -59,7 +59,7 @@
     "jshint-stylish": "^2.0.1",
     "lodash": "3.x",
     "open": "~0.0.5",
-    "processhost": "~0.2.1",
+    "processhost": "~0.2.3",
     "when": "3.x"
   }
 }
