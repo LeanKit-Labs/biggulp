@@ -21,9 +21,7 @@ All of these can be changed, but without providing specific values for them, the
 	integrationSpecPaths: [ "./spec/integration" ],
 	specs: [ "**/*.spec.js" ],
 	watchPaths: [ "./src/**/*", "./spec/**/*", "./resource/**/*" ],
-	sourcePaths: [ "./src", "./resource" ],
-	sources: [ "**/*.js" ],
-	exclude: [ "!node_modules/**", "!coverage/**" ],
+	sources: [ "*.js", "{resource,src,spec}/**/*.js" ],
 	jscsCfgPath: ".jscsrc"
 }
  ```
