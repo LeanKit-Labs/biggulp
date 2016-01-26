@@ -1,4 +1,5 @@
 ## 0.2.x
+ * Speed up linting and formatting by using a more specific sources glob
 
 ### 0.2.1
  * Fix defect that causing watch tasks to crash the process if a test failed

@@ -11,10 +11,8 @@ var defaults = {
 	integrationSpecPaths: [ "./spec/integration" ],
 	specs: [ "**/*.spec.js" ],
 	watchPaths: [ "./src/**/*", "./spec/**/*", "./resource/**/*" ],
-	sourcePaths: [ "./src", "./resource" ],
-	sources: [ "**/*.js" ],
+	sources: [ "*.js", "{resource,src,spec}/**/*.js" ],
 	coverageHtml: "./coverage/lcov-report/index.html",
-	exclude: [ "!node_modules/**", "!coverage/**" ],
 	jscsCfgPath: ".jscsrc"
 };
 var jshint = require( "gulp-jshint" );
@@ -186,7 +184,7 @@ module.exports = function( gulpRef, cfg ) {
 
 	function format( opt ) {
 		var _opt = opt || options;
-		return gulp.src( _opt.sources.concat( _opt.exclude ) )
+		return gulp.src( _opt.sources )
 			.pipe( jscs( {
 				configPath: _opt.jscsCfgPath,
 				fix: true
@@ -201,7 +199,7 @@ module.exports = function( gulpRef, cfg ) {
 
 	function lint( opt ) {
 		var _opt = opt || options;
-		return gulp.src( _opt.sources.concat( _opt.exclude ) )
+		return gulp.src( _opt.sources )
 			.on( "error", function( error ) {
 				gutil.log( gutil.colors.red( error.message + " in " + error.fileName ) );
 				this.end();
