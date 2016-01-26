@@ -1,7 +1,9 @@
-## 0.2.x
+## 0.3.x
+
+### 0.3.0
 
  * Speed up linting and formatting by using a more specific sources glob
- * Updated gulp-jscs dependency
+ * Update gulp-jscs dependency
 
 ### 0.2.1
  * Fix defect that causing watch tasks to crash the process if a test failed
