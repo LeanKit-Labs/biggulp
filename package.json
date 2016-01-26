@@ -52,7 +52,7 @@
   "dependencies": {
     "gulp-changed": "^1.2.1",
     "gulp-help": "^1.6.0",
-    "gulp-jscs": "^1.6.0",
+    "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^1.11.0",
     "gulp-spawn-mocha": "~2.0.1",
     "gulp-util": "^3.0.6",
