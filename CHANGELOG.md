@@ -1,4 +1,7 @@
-## 0.3.x
+## 0.4.x
+
+### 0.4.0
+ * Added option for setting istanbul options
 
 ### 0.3.0
 
