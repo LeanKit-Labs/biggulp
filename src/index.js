@@ -43,7 +43,9 @@ module.exports = function( gulpRef, cfg ) {
 	function runSpecs( testCfg ) {
 		var mochaOpts = {
 			R: "spec",
-			istanbul: testCfg.coverage ? { x: testCfg.coverageExclude } : false
+			istanbul: testCfg.coverage ? _.extend( {
+				x: testCfg.coverageExclude
+			}, options.istanbul || {} ) : false
 		};
 		if ( options.esnext ) {
 			mochaOpts.r = "babel/register";
