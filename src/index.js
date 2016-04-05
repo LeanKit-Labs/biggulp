@@ -20,6 +20,7 @@ var jscs = require( "gulp-jscs" );
 var gutil = require( "gulp-util" );
 var gulpChanged = require( "gulp-changed" );
 var stylish = require( "jshint-stylish" );
+var BABEL_ISTANBUL_PATH = path.join( path.dirname( require.resolve( "babel-istanbul" ) ), "lib/cli.js" );
 
 function permuPath( dirs, globs ) {
 	return _.reduce( globs, function( accum, glb ) {
@@ -43,12 +44,14 @@ module.exports = function( gulpRef, cfg ) {
 	function runSpecs( testCfg ) {
 		var mochaOpts = {
 			R: "spec",
-			istanbul: testCfg.coverage ? _.extend( {
-				x: testCfg.coverageExclude
-			}, options.istanbul || {} ) : false
+			istanbul: testCfg.coverage ? {
+				x: testCfg.coverageExclude,
+				// If esnext then we tell gulp-spawn-mocha to use babel-istanbul for coverage
+				bin: options.esnext ? BABEL_ISTANBUL_PATH : false
+			} : false
 		};
-		if ( options.esnext ) {
-			mochaOpts.r = "babel/register";
+		if ( options.esnext && !testCfg.coverage ) {
+			mochaOpts.compilers = [ "js:babel-register" ];
 		}
 		return gulp.src( testCfg.specs, { read: false } )
 			.pipe( mocha( mochaOpts ) );
