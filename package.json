@@ -50,6 +50,8 @@
   },
   "homepage": "https://github.com/LeanKit-Labs/biggulp",
   "dependencies": {
+    "babel-core": "^6.7.4",
+    "babel-istanbul": "^0.7.0",
     "gulp-changed": "^1.2.1",
     "gulp-help": "^1.6.0",
     "gulp-jscs": "^3.0.2",
