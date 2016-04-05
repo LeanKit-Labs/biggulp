@@ -1,3 +1,9 @@
+## 1.x
+
+### 1.0.0
+
+* BREAKING CHANGE - Update to babel 6
+
 ## 0.4.x
 
 ### 0.4.0
