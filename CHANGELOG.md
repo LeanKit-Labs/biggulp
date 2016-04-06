@@ -1,5 +1,9 @@
 ## 1.x
 
+### 1.1.0
+
+* Replaced gulp-spawn-mocha + istanbul with nyc + istanbul for coverage instrumentation
+
 ### 1.0.0
 
 * BREAKING CHANGE - Update to babel 6
