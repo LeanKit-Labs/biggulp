@@ -20,7 +20,8 @@ var jscs = require( "gulp-jscs" );
 var gutil = require( "gulp-util" );
 var gulpChanged = require( "gulp-changed" );
 var stylish = require( "jshint-stylish" );
-var BABEL_ISTANBUL_PATH = path.join( path.dirname( require.resolve( "babel-istanbul" ) ), "lib/cli.js" );
+var NYC_PATH = path.join( path.dirname( require.resolve( "nyc" ) ), "./bin/nyc.js" );
+var MOCHA_PATH = path.join( path.dirname( require.resolve( "mocha" ) ), "./bin/mocha" );
 
 function permuPath( dirs, globs ) {
 	return _.reduce( globs, function( accum, glb ) {
@@ -33,6 +34,25 @@ function permuPath( dirs, globs ) {
 		return accum;
 	}, [] );
 }
+var spawn = require( "child_process" ).spawn;
+function runNyc( options, testCfg ) {
+	var args = [
+		"--reporter=text-summary",
+		"--reporter=lcov"
+	];
+
+	if ( options.esnext ) {
+		args.push( "--require=babel-register" );
+	}
+
+	args.push( MOCHA_PATH, "-R", "spec" );
+
+	args = args.concat( testCfg.specs );
+
+	return spawn( NYC_PATH, args, {
+		stdio: "inherit"
+	} );
+}
 
 module.exports = function( gulpRef, cfg ) {
 	var gulp = require( "gulp-help" )( gulpRef, {
@@ -43,18 +63,18 @@ module.exports = function( gulpRef, cfg ) {
 
 	function runSpecs( testCfg ) {
 		var mochaOpts = {
-			R: "spec",
-			istanbul: testCfg.coverage ? {
-				x: testCfg.coverageExclude,
-				// If esnext then we tell gulp-spawn-mocha to use babel-istanbul for coverage
-				bin: options.esnext ? BABEL_ISTANBUL_PATH : false
-			} : false
+			R: "spec"
 		};
 		if ( options.esnext && !testCfg.coverage ) {
 			mochaOpts.compilers = [ "js:babel-register" ];
 		}
-		return gulp.src( testCfg.specs, { read: false } )
-			.pipe( mocha( mochaOpts ) );
+
+		if ( testCfg.coverage ) {
+			return runNyc( options, testCfg, mochaOpts );
+		} else {
+			return gulp.src( testCfg.specs, { read: false } )
+				.pipe( mocha( mochaOpts ) );
+		}
 	}
 
 	function test( specs ) {
