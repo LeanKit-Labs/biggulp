@@ -1,5 +1,9 @@
 ## 1.x
 
+### 1.2.0
+
+* Adding eslint support to biggulp.
+
 ### 1.1.0
 
 * Replaced gulp-spawn-mocha + istanbul with nyc + istanbul for coverage instrumentation

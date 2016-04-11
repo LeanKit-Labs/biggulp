@@ -1,6 +1,6 @@
 {
   "name": "biggulp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Features and utilities to simplify advanced gulpfiles",
   "main": "src/index.js",
   "files": [
