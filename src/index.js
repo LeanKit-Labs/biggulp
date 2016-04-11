@@ -5,6 +5,8 @@ var path = require( "path" );
 var mocha = require( "gulp-spawn-mocha" );
 var processhost = require( "processhost" )();
 var cmdPostfix = process.platform === "win32" ? ".cmd" : "";
+var workingDir = process.cwd();
+var fs = require( "fs" );
 var defaults = {
 	allSpecPaths: [ "./spec" ],
 	behaviorSpecPaths: [ "./spec/behavior" ],
@@ -13,15 +15,25 @@ var defaults = {
 	watchPaths: [ "./src/**/*", "./spec/**/*", "./resource/**/*" ],
 	sources: [ "*.js", "{resource,src,spec}/**/*.js" ],
 	coverageHtml: "./coverage/lcov-report/index.html",
-	jscsCfgPath: ".jscsrc"
+	jscsCfgPath: ".jscsrc",
+	linter: "auto"
 };
-var jshint = require( "gulp-jshint" );
+var gulpJshint = require( "gulp-jshint" );
 var jscs = require( "gulp-jscs" );
 var gutil = require( "gulp-util" );
 var gulpChanged = require( "gulp-changed" );
 var stylish = require( "jshint-stylish" );
 var NYC_PATH = path.join( path.dirname( require.resolve( "nyc" ) ), "./bin/nyc.js" );
 var MOCHA_PATH = path.join( path.dirname( require.resolve( "mocha" ) ), "./bin/mocha" );
+var ESLINTRC_FILES = [
+	".eslintrc",
+	".eslintrc.js",
+	".eslintrc.json",
+	".eslintrc.yml",
+	".eslintrc.yaml"
+].map( function( f ) {
+	return path.join( workingDir, f );
+} );
 
 function permuPath( dirs, globs ) {
 	return _.reduce( globs, function( accum, glb ) {
@@ -222,16 +234,64 @@ module.exports = function( gulpRef, cfg ) {
 			.pipe( gulp.dest( "." ) );
 	}
 
-	function lint( opt ) {
+	function jshint( opt ) {
 		var _opt = opt || options;
 		return gulp.src( _opt.sources )
 			.on( "error", function( error ) {
 				gutil.log( gutil.colors.red( error.message + " in " + error.fileName ) );
 				this.end();
 			} )
-			.pipe( jshint() )
-			.pipe( jshint.reporter( stylish ) )
-			.pipe( jshint.reporter( "fail" ) );
+			.pipe( gulpJshint() )
+			.pipe( gulpJshint.reporter( stylish ) )
+			.pipe( gulpJshint.reporter( "fail" ) );
+	}
+
+	function eslint( opt ) {
+		var _opt = opt || options;
+		var gulpEslint = options.eslint || require( "gulp-eslint" );
+
+		return gulp.src( _opt.sources )
+			.pipe( gulpEslint() )
+			.pipe( gulpEslint.format() )
+			.pipe( gulpEslint.failAfterError() );
+	}
+
+	function hasEslintConfig() {
+		var hasConfig = false;
+		ESLINTRC_FILES.forEach( function( f ) {
+			try {
+				fs.accessSync( f );
+				hasConfig = true;
+				return;
+			} catch ( e ) {
+				return;
+			}
+		} );
+
+		return hasConfig;
+	}
+
+	function lint( opt ) {
+		var linterOpt = options.linter;
+		var linterFn;
+
+		if ( linterOpt === "auto" ) {
+			if ( options.eslint || hasEslintConfig() ) {
+				linterOpt = "eslint";
+			} else {
+				linterOpt = "jshint";
+			}
+		}
+
+		if ( linterOpt === "eslint" ) {
+			gutil.log( "Using eslint" );
+			linterFn = eslint;
+		} else {
+			gutil.log( "Using jshint" );
+			linterFn = jshint;
+		}
+
+		return linterFn( opt );
 	}
 
 	gulp.task( "restartProcesses", function( cb ) {
@@ -260,6 +320,8 @@ module.exports = function( gulpRef, cfg ) {
 		watch: watch,
 		withCoverage: cover,
 		format: format,
-		lint: lint
+		lint: lint,
+		jshint: jshint,
+		eslint: eslint
 	};
 };

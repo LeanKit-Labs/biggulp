@@ -55,12 +55,24 @@ module.exports = function( gulp, cfg ) {
 		},
 		format: {
 			description: "Runs format linting and fixing.",
-			deps: [ "jshint" ],
+			deps: [ "lint" ],
 			fn: function() {
 				return bg.format();
 			}
 		},
 		jshint: {
+			description: "Lints your code. Warning: It might hurt your feelings. See Doug Crockford for free hugs.",
+			fn: function() {
+				return bg.jshint();
+			}
+		},
+		eslint: {
+			description: "Lints your code. Warning: It might hurt your feelings. See Doug Crockford for free hugs.",
+			fn: function() {
+				return bg.eslint();
+			}
+		},
+		lint: {
 			description: "Lints your code. Warning: It might hurt your feelings. See Doug Crockford for free hugs.",
 			fn: function() {
 				return bg.lint();
@@ -78,7 +90,7 @@ module.exports = function( gulp, cfg ) {
 		},
 		"test-and-exit": {
 			description: "Runs all tests and exits.",
-			deps: [ "jshint" ],
+			deps: [ "lint" ],
 			fn: function() {
 				bg.testAllOnce();
 			}
