@@ -50,7 +50,8 @@ var spawn = require( "child_process" ).spawn;
 function runNyc( options, testCfg ) {
 	var args = [
 		"--reporter=text-summary",
-		"--reporter=lcov"
+		"--reporter=lcov",
+		"--exclude=" + testCfg.coverageExclude
 	];
 
 	if ( options.esnext ) {
