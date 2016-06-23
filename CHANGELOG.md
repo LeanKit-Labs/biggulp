@@ -1,5 +1,9 @@
 ## 1.x
 
+### 1.3.0
+
+* Added `exclude` option to NYC command args
+
 ### 1.2.0
 
 * Adding eslint support to biggulp.
